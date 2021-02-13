@@ -11,17 +11,9 @@ package calculadora;
  */
 public class Calculadora {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        //Hola
-        //Elmer
-        //quier ver si funciona
-        //funciona?
-        //sisi caro te agrego ya a Whatsapp
-        //ya llegue perros
-        //comienzo
-    }
-    
+        private String Cadena;
+        
+        public Calculadora(){
+            
+        }    
 }
