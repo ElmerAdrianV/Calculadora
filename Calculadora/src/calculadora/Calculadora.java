@@ -11,9 +11,10 @@ package calculadora;
  */
 public class Calculadora {
 
-    private String cadena;
-    
-   
-    
-    
+
+        private String Cadena;
+        
+        public Calculadora(){
+            
+        }    
 }

@@ -6,7 +6,7 @@
 package calculadora;
     import java.awt.GridLayout;
     import javax.swing.*;
-import javax.swing.border.Border;
+    import javax.swing.border.Border;
 
 /**
  *
