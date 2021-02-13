@@ -22,6 +22,12 @@ public class Calculadora {
         //sisi caro te agrego ya a Whatsapp
         //ya llegue perros
         //comienzo
+        
+        private String Cadena;
+        
+        public Calculadora(){
+            
+        }
     }
     
 }
