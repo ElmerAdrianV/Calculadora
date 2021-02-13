@@ -14,6 +14,7 @@ import pila.PilaA;
  */
 public class Calculadora {
 
+
     private String operaciones;
     private String resultado;
 
@@ -161,7 +162,6 @@ public class Calculadora {
         PilaA <String> aux= new PilaA<>();
         int i=0,j, n= cadena.length();
         StringBuilder sb= new StringBuilder();
-        
         while(i<n && resp){
             j=i;
             cadena.charAt(i);
