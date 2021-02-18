@@ -5,7 +5,7 @@
  */
 package calculadora;
 
-import pila.PilaA;
+import pila.PilaA; ;
 
 /**
  *
@@ -14,12 +14,22 @@ import pila.PilaA;
  */
 public class Calculadora {
 
-
-    private String operaciones;
+    private String cadena; //inFija
+    private String operaciones; //postFija;
     private String resultado;
 
     public Calculadora(){
     }    
+    
+
+    
+    public String getCadena() {
+        return cadena;
+    }
+
+    public void setCadena(String cadena) {    
+        this.cadena = cadena;
+    }
     
     /**
      *@return <pre>regresa el resultado de las operaciones 
@@ -32,10 +42,10 @@ public class Calculadora {
 
     @Override
     public String toString() {
-        return "Calculadora: \n" + "operaciones=" + operaciones + ", resultado=" + resultado + '\n';
+        return "Calculadora: \n" +"cadena="+cadena+  "operaciones=" + operaciones + ", resultado=" + resultado + '\n';
     }
     
-    public boolean isNumber(char a){
+    private boolean isNumber(char a){
         boolean resp= true;
         switch(a){
             case '0':
@@ -56,7 +66,7 @@ public class Calculadora {
         return resp;
     }
     
-    public boolean isOperator(char a){
+    private boolean isOperator(char a){
         boolean resp= true;
         switch(a){
             case '+':
@@ -64,6 +74,8 @@ public class Calculadora {
             case '/':
             case '*':
             case '^':
+            case '(':
+            case ')':
                 break;
             default:
                 resp= false;
@@ -72,12 +84,13 @@ public class Calculadora {
         return resp;
     }
     
-    private boolean verificarOperaciones(String cadena){
+    private boolean verificarCadena(){
         boolean resp=true;
         PilaA<Character> parentesis = new PilaA<>();
+        //PilaA<Character>
         int i=0, n=cadena.length();
         char a;
-        
+
         while(i<n && resp){
             switch(cadena.charAt(i)){
                 case '(':
@@ -94,21 +107,26 @@ public class Calculadora {
                         resp=false;
                     break;
                 case ')':
-                    if(!parentesis.isEmpty())
+                    if(!parentesis.isEmpty()){
                         parentesis.pop();
+                        if(i+1<n){
+                            a=cadena.charAt(i+1);
+                            if( isNumber(a) )
+                                resp=false;
+                        }
+                    }
                     else
                         resp=false;
                     break; 
                 case'+':
                     if(i+1<n){
                         a=cadena.charAt(i+1);
-                        if( a=='^' || a=='*' || a=='/' || a==')' ){
+                        if( a=='+' || a=='^' || a=='*' || a=='/' || a==')' ){
                             resp=false;
                         }
                     }
                     else
                         resp=false;
-
                     break;
                 case'-':
                     if(i+1<n){
@@ -156,28 +174,82 @@ public class Calculadora {
         return resp;
     }
     
-    /*
-    private boolean verificarOperaciones(String cadena){
+    
+    private boolean jerarquiaOperandos(char operando, char tope){
         boolean resp=true;
-        PilaA <String> aux= new PilaA<>();
-        int i=0,j, n= cadena.length();
-        StringBuilder sb= new StringBuilder();
-        while(i<n && resp){
-            j=i;
-            cadena.charAt(i);
-            while(j<n && resp){
-                
-            }
-            
+        switch(operando){
+            case '+':
+                if(tope=='+')
+                    resp=false;
+                break;
+            case '*':
+                if(tope=='/'||tope=='*')
+                    resp=false;
+                break;
+            case '/':
+                if(tope=='/'||tope=='*')
+                    resp=false;
+                break;
+            case '^':
+                if(tope=='^')
+                    resp=false;
+                break;    
         }
-        
-        
+           
         return resp;
     }
-      */     
-    public String algortimoPosfija(String cadena){
+    
+    
+    private void convierteAOperaciones(){
+        PilaA<Character> aux= new PilaA();
+        StringBuilder cadenaPostFija=new StringBuilder();
+        char a;
+        int n= cadena.length();
+        
+        if(verificarCadena()){
+            for(int i=0;i<n;i++){
+                a=cadena.charAt(i);
+                if(!isOperator(a))
+                    cadenaPostFija.append(a);
+                else{
+                    cadenaPostFija.append("|");
 
-        return "Hola";
+                    switch(a){
+                        case '(':
+                            aux.push(a);
+                            break;
+                        case ')':
+                            while(!aux.isEmpty()&&!aux.peek().equals('(')){
+                                cadenaPostFija.append(aux.pop());
+                            }
+                            aux.pop();
+                            break;
+                        default:
+                            if(a=='-'){
+                                cadenaPostFija.append(a);
+                                a='+';   
+                            } 
+                            while(!aux.isEmpty()&& jerarquiaOperandos(a,aux.peek())){
+                                cadenaPostFija.append(aux.pop());
+                            }
+                            aux.push(a);
+                            break;
+                    }
+                }
+            }
+            //Aqui guarda
+            operaciones= cadenaPostFija.toString();
+        }
+        else
+            operaciones="¡Error!";
+        
     }
+    
+    private void evaluarOperaciones(){
+        
+        
+    }
+        
+    
 
 }
