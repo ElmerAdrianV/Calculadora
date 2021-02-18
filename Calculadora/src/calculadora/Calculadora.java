@@ -14,14 +14,17 @@ import pila.PilaA; ;
  */
 public class Calculadora {
 
-        private String cadena; //inFija
+    private String cadena; //inFija
     private String operaciones; //postFija;
     private String resultado;
 
     public Calculadora(){
     }    
     
-
+    public Calculadora(String cadena){
+        this.cadena=cadena;
+        verificarCadena();
+    }
     
     public String getCadena() {
         return cadena;
@@ -84,7 +87,7 @@ public class Calculadora {
         return resp;
     }
     
-    private boolean verificarCadena(){
+    public boolean verificarCadena(){
         boolean resp=true;
         PilaA<Character> parentesis = new PilaA<>();
         boolean punto=false;
@@ -266,7 +269,6 @@ public class Calculadora {
                     }
                 }
             }
-            //Aqui guarda
             operaciones= cadenaPostFija.toString();
         }
         else
