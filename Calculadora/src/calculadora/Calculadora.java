@@ -87,7 +87,7 @@ public class Calculadora {
     private boolean verificarCadena(){
         boolean resp=true;
         PilaA<Character> parentesis = new PilaA<>();
-        //PilaA<Character>
+        boolean punto=false;
         int i=0, n=cadena.length();
         char a;
 
@@ -105,6 +105,8 @@ public class Calculadora {
                     }
                     else
                         resp=false;
+                    
+                    punto=false;
                     break;
                 case ')':
                     if(!parentesis.isEmpty()){
@@ -117,6 +119,8 @@ public class Calculadora {
                     }
                     else
                         resp=false;
+                    
+                    punto=false;
                     break; 
                 case'+':
                     if(i+1<n){
@@ -127,46 +131,71 @@ public class Calculadora {
                     }
                     else
                         resp=false;
+                    
+                    punto=false;
                     break;
                 case'-':
                     if(i+1<n){
                         a=cadena.charAt(i+1);
-                        if( a=='^' || a=='*' || a=='/' || a==')' ){
+                        if( a=='+'|| a=='^' || a=='*' || a=='/' || a==')' ){
                             resp=false;
                         }
                     }
                     else
                         resp=false;
+                    
+                    punto=false;
                     break;
                 case'*':
                     if(i+1<n){
                         a=cadena.charAt(i+1);
-                        if( a=='^' || a=='*' || a=='/' || a==')'){
+                        if( a=='+' || a=='^' || a=='*' || a=='/' || a==')'){
                             resp=false;
                         }
                     }
                     else
                         resp=false;
+                    
+                    punto=false;
                     break;
                 case'/':
                     if(i+1<n){
                         a=cadena.charAt(i+1);
-                        if( a=='^' || a=='*' || a=='/' || a==')'){
+                        if( a=='+' || a=='^' || a=='*' || a=='/' || a==')'){
                             resp=false;
                         }
                     }
                     else
                         resp=false;
+                    
+                    punto=false;
                     break;
                 case'^':
                     if(i+1<n){
                         a=cadena.charAt(i+1);
-                        if( a=='^' || a=='*' || a=='/' || a==')' ){
+                        if( a=='+' || a=='-' || a=='^' || a=='*' || a=='/' || a==')' ){
                             resp=false;
                         }
                     }
                     else
                         resp=false;
+                    punto=false;
+                    break;
+                case '.':
+                    if(punto){
+                        resp=false;
+                    }
+                    else{
+                        punto=true;
+                        if(i+1<n){
+                            a=cadena.charAt(i+1);
+                            if( !isNumber(a) ){
+                                resp=false;
+                            }
+                        }
+                        else
+                            resp=false;
+                    }
                     break;
             }
             i++;
