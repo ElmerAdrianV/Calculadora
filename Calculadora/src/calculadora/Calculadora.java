@@ -243,16 +243,18 @@ public class Calculadora {
                 if(!isOperator(a))
                     cadenaPostFija.append(a);
                 else{
-                    cadenaPostFija.append("M");
-
+                    if(cadenaPostFija.charAt(cadenaPostFija.length()-1)!='M')
+                        cadenaPostFija.append("M");
                     switch(a){
                         case '(':
+                            if(isNumber(cadena.charAt(i-1)))
+                                aux.push('*');
                             aux.push(a);
                             break;
                         case ')':
-                            while(!aux.isEmpty()&&!aux.peek().equals('(')){
+                            while(!aux.isEmpty()&& !aux.peek().equals('('))
                                 cadenaPostFija.append(aux.pop());
-                            }
+                            
                             aux.pop();
                             break;
                         default:
@@ -260,14 +262,17 @@ public class Calculadora {
                                 cadenaPostFija.append(a);
                                 a='+';   
                             } 
-                            while(!aux.isEmpty()&& jerarquiaOperandos(a,aux.peek())){
+                            while(!aux.isEmpty() && aux.peek()!='(' && jerarquiaOperandos(a,aux.peek()))
                                 cadenaPostFija.append(aux.pop());
-                            }
+                            
                             aux.push(a);
                             break;
                     }
                 }
             }
+            while(!aux.isEmpty())
+                cadenaPostFija.append(aux.pop());
+            
             operaciones= cadenaPostFija.toString();
         }
         else
