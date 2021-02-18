@@ -5,7 +5,7 @@
  */
 package calculadora;
 
- import pila.PilaA;
+import pila.PilaA; ;
 
 /**
  *
@@ -77,7 +77,7 @@ public class Calculadora {
         PilaA<Character> parentesis = new PilaA<>();
         int i=0, n=cadena.length();
         char a;
-        
+
         while(i<n && resp){
             switch(cadena.charAt(i)){
                 case '(':
@@ -94,8 +94,14 @@ public class Calculadora {
                         resp=false;
                     break;
                 case ')':
-                    if(!parentesis.isEmpty())
+                    if(!parentesis.isEmpty()){
                         parentesis.pop();
+                        if(i+1<n){
+                            a=cadena.charAt(i+1);
+                            if( isNumber(a) )
+                                resp=false;
+                        }
+                    }
                     else
                         resp=false;
                     break; 
@@ -157,9 +163,20 @@ public class Calculadora {
     }
     
     
-    public String algortimoPosfija(String cadena){
-
-        return "Hola";
+    public void algortimoPosfija(String cadena){
+        boolean valida=verificarOperaciones(cadena);
+        if(valida){
+           
+        }
+        else{
+            this.resultado="Error";
+        }
+        
+        
     }
+    
+    public void hasOperaciones(){}
+        
+    
 
 }
