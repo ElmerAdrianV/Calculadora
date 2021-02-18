@@ -284,12 +284,11 @@ public class Calculadora {
         boolean error=false;
         
         if(!this.operaciones.equals("¡Error!")){
-            j=0;
-            while(j<n && operaciones.charAt(j)!='M')
-                    j++;
+            while(i<n && operaciones.charAt(i)!='M')
+                    i++;
             
-            x= Double.parseDouble( operaciones.substring(i, j) );
-            i=j+1;
+            x= Double.parseDouble( operaciones.substring(0, i) );
+            i++;//saltarnos la M;
             
             while(i<n && !error){
                 j=i;
@@ -298,8 +297,9 @@ public class Calculadora {
                 
                 y= Double.parseDouble( operaciones.substring(i, j) );
                 j++;//saltarse la M;
-                while(j<n && isOperator(operaciones.charAt(j))){
-                    switch(operaciones.charAt(j+1)){
+                
+                while(j<n && isOperator(operaciones.charAt(j)) ){
+                    switch(operaciones.charAt(j)){
                         case'+':
                             x=+y;
                             break;
