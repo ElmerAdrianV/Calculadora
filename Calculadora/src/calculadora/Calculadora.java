@@ -14,7 +14,7 @@ import pila.PilaA; ;
  */
 public class Calculadora {
 
-    private String cadena; //inFija
+        private String cadena; //inFija
     private String operaciones; //postFija;
     private String resultado;
 
