@@ -5,7 +5,7 @@
  */
 package calculadora;
 
-import pila.PilaA;
+ import pila.PilaA;
 
 /**
  *
@@ -156,25 +156,7 @@ public class Calculadora {
         return resp;
     }
     
-    /*
-    private boolean verificarOperaciones(String cadena){
-        boolean resp=true;
-        PilaA <String> aux= new PilaA<>();
-        int i=0,j, n= cadena.length();
-        StringBuilder sb= new StringBuilder();
-        while(i<n && resp){
-            j=i;
-            cadena.charAt(i);
-            while(j<n && resp){
-                
-            }
-            
-        }
-        
-        
-        return resp;
-    }
-      */     
+    
     public String algortimoPosfija(String cadena){
 
         return "Hola";
