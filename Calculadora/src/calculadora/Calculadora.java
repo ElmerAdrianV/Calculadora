@@ -281,15 +281,17 @@ public class Calculadora {
         
         int i=0, j , n=operaciones.length();
         double x, y;
+        boolean error=false;
         
         if(!this.operaciones.equals("¡Error!")){
             j=0;
             while(j<n && operaciones.charAt(j)!='M')
                     j++;
+            
             x= Double.parseDouble( operaciones.substring(i, j) );
             i=j+1;
             
-            while(i<n){
+            while(i<n && !error){
                 j=i;
                 while(j<n && operaciones.charAt(j)!='M')
                     j++;
@@ -305,17 +307,25 @@ public class Calculadora {
                             x*=y;
                             break;
                         case'/':
-                            x/=y;
+                            if(y==0)
+                                error=true;
+                            else
+                                x/=y;
                             break;
                         case'^':
-                            x=Math.pow(x, y);
+                            if(y==0 && x==0)
+                                error=true;
+                            else
+                                x=Math.pow(x, y);    
                             break;
                     }
                 }
                 i=j+2;
             }
-            
-            this.resultado=String.valueOf(x);
+            if(!error)
+                this.resultado=String.valueOf(x);
+            else
+                this.resultado="¡Error!";
         }
         else
           this.resultado="¡Error!";
