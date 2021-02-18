@@ -297,8 +297,8 @@ public class Calculadora {
                     j++;
                 
                 y= Double.parseDouble( operaciones.substring(i, j) );
-                
-                if(j+1<n){
+                j++;//saltarse la M;
+                while(j<n && isOperator(operaciones.charAt(j))){
                     switch(operaciones.charAt(j+1)){
                         case'+':
                             x=+y;
@@ -319,8 +319,9 @@ public class Calculadora {
                                 x=Math.pow(x, y);    
                             break;
                     }
+                    j++;
                 }
-                i=j+2;
+                i=j;
             }
             if(!error)
                 this.resultado=String.valueOf(x);
