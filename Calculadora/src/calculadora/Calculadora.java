@@ -175,7 +175,7 @@ public class Calculadora {
     }
     
     
-    private boolean jerarquiaOperaciones(char operando, char tope){
+    private boolean jerarquiaOperandos(char operando, char tope){
         boolean resp=true;
         switch(operando){
             case '+':
@@ -200,7 +200,7 @@ public class Calculadora {
     }
     
     
-    private void algortimoPosfija(){
+    private void convierteAOperaciones(){
         PilaA<Character> aux= new PilaA();
         StringBuilder cadenaPostFija=new StringBuilder();
         char a;
@@ -229,7 +229,7 @@ public class Calculadora {
                                 cadenaPostFija.append(a);
                                 a='+';   
                             } 
-                            while(!aux.isEmpty()&& jerarquiaOperaciones(a,aux.peek())){
+                            while(!aux.isEmpty()&& jerarquiaOperandos(a,aux.peek())){
                                 cadenaPostFija.append(aux.pop());
                             }
                             aux.push(a);
@@ -241,12 +241,13 @@ public class Calculadora {
             operaciones= cadenaPostFija.toString();
         }
         else
-            resultado="¡Error!";
+            operaciones="¡Error!";
         
     }
     
-    public String evaluarOperaciones(){
-        return resultado;
+    private void evaluarOperaciones(){
+        
+        
     }
         
     
