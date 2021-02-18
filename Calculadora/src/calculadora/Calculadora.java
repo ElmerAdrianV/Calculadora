@@ -237,14 +237,13 @@ public class Calculadora {
         StringBuilder cadenaPostFija=new StringBuilder();
         char a;
         int n= cadena.length();
-        
         if(verificarCadena()){
             for(int i=0;i<n;i++){
                 a=cadena.charAt(i);
                 if(!isOperator(a))
                     cadenaPostFija.append(a);
                 else{
-                    cadenaPostFija.append("|");
+                    cadenaPostFija.append("M");
 
                     switch(a){
                         case '(':
@@ -276,9 +275,52 @@ public class Calculadora {
         
     }
     
-    private void evaluarOperaciones(){
+    public String evaluarOperaciones(String cadena){
+        this.cadena=cadena;
+        convierteAOperaciones();
         
+        int i=0, j , n=operaciones.length();
+        double x, y;
         
+        if(!this.operaciones.equals("¡Error!")){
+            j=0;
+            while(j<n && operaciones.charAt(j)!='M')
+                    j++;
+            x= Double.parseDouble( operaciones.substring(i, j) );
+            i=j+1;
+            
+            while(i<n){
+                j=i;
+                while(j<n && operaciones.charAt(j)!='M')
+                    j++;
+                
+                y= Double.parseDouble( operaciones.substring(i, j) );
+                
+                if(j+1<n){
+                    switch(operaciones.charAt(j+1)){
+                        case'+':
+                            x=+y;
+                            break;
+                        case'*':
+                            x*=y;
+                            break;
+                        case'/':
+                            x/=y;
+                            break;
+                        case'^':
+                            x=Math.pow(x, y);
+                            break;
+                    }
+                }
+                i=j+2;
+            }
+            
+            this.resultado=String.valueOf(x);
+        }
+        else
+          this.resultado="¡Error!";
+      
+        return resultado;
     }
         
     
