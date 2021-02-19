@@ -235,25 +235,29 @@ public class Calculadora {
     private void convierteAOperaciones(){
         PilaA<Character> aux= new PilaA();
         StringBuilder cadenaPostFija=new StringBuilder();
-        char a;
+        char a,last;
         int n= cadena.length();
-        
         if(verificarCadena()){
             for(int i=0;i<n;i++){
                 a=cadena.charAt(i);
                 if(!isOperator(a))
                     cadenaPostFija.append(a);
                 else{
-                    cadenaPostFija.append("|");
-
+                    if(i>0){
+                        last=cadenaPostFija.charAt(cadenaPostFija.length()-1);
+                        if(!isOperator(last)&& last!='M')
+                            cadenaPostFija.append("M");
+                    }
                     switch(a){
                         case '(':
+                            if(i>0 && isNumber(cadena.charAt(i-1)))
+                                aux.push('*');
                             aux.push(a);
                             break;
                         case ')':
-                            while(!aux.isEmpty()&&!aux.peek().equals('(')){
+                            while(!aux.isEmpty()&& !aux.peek().equals('('))
                                 cadenaPostFija.append(aux.pop());
-                            }
+                            
                             aux.pop();
                             break;
                         default:
@@ -261,14 +265,17 @@ public class Calculadora {
                                 cadenaPostFija.append(a);
                                 a='+';   
                             } 
-                            while(!aux.isEmpty()&& jerarquiaOperandos(a,aux.peek())){
+                            while(!aux.isEmpty() && aux.peek()!='(' && jerarquiaOperandos(a,aux.peek()))
                                 cadenaPostFija.append(aux.pop());
-                            }
+                            
                             aux.push(a);
                             break;
                     }
                 }
             }
+            while(!aux.isEmpty())
+                cadenaPostFija.append(aux.pop());
+            
             operaciones= cadenaPostFija.toString();
         }
         else
@@ -276,9 +283,63 @@ public class Calculadora {
         
     }
     
-    private void evaluarOperaciones(){
+    public String evaluarOperaciones(String cadena){
+        this.cadena=cadena;
+        convierteAOperaciones();
         
+        int i=0, j , n=operaciones.length();
+        PilaA<Double> numeros=new PilaA<>();
+        double x,y;
+        boolean error=false;
         
+        if(!this.operaciones.equals("¡Error!")){
+            while(i<n && !error){
+                if( !isOperator(operaciones.charAt(i)) ){
+                    j=i;
+                    while(i<n && operaciones.charAt(i)!='M')
+                        i++;
+                    numeros.push( Double.parseDouble( operaciones.substring(j,i) ) );
+                    i++;//saltarse la M;	 
+                }
+                else{
+                    while(i<n && isOperator(operaciones.charAt(i)) ){
+                        x=numeros.pop();
+                        y=numeros.pop();
+                        switch(operaciones.charAt(i)){
+                            case'+':
+                                x=x+y;
+                                break;
+                            case'*':
+                                x=x*y;
+                                break;
+                            case'/':
+                                if(y==0)
+                                    error=true;
+                                else
+                                    x=x/y;
+                                break;
+                            case'^':
+                                if(y==0 && x==0)
+                                    error=true;
+                                else
+                                    x=Math.pow(x, y);
+                                break;
+                        }
+                        numeros.push(x);
+                        i++;
+                    }
+                }
+            }
+            if(!error){
+                this.resultado=String.valueOf(numeros.pop());
+            }
+            else
+                this.resultado="¡Error!";
+        }
+        else
+          this.resultado="¡Error!";
+      
+        return resultado;
     }
         
     
