@@ -304,16 +304,16 @@ public class Calculadora {
                         y=numeros.pop();
                         switch(operaciones.charAt(i)){
                             case'+':
-                                x=+y;
+                                x=x+y;
                                 break;
                             case'*':
-                                x*=y;
+                                x=x*y;
                                 break;
                             case'/':
                                 if(y==0)
                                     error=true;
                                 else
-                                    x/=y;
+                                    x=x/y;
                                 break;
                             case'^':
                                 if(y==0 && x==0)
