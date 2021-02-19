@@ -243,9 +243,11 @@ public class Calculadora {
                 if(!isOperator(a))
                     cadenaPostFija.append(a);
                 else{
-                    last=cadenaPostFija.charAt(cadenaPostFija.length()-1);
-                    if(isOperator(last)&& last!='M')
-                        cadenaPostFija.append("M");
+                    if(i>0){
+                        last=cadenaPostFija.charAt(cadenaPostFija.length()-1);
+                        if(isOperator(last)&& last!='M')
+                            cadenaPostFija.append("M");
+                    }
                     switch(a){
                         case '(':
                             if(i>0 && isNumber(cadena.charAt(i-1)))
