@@ -245,7 +245,7 @@ public class Calculadora {
                 else{
                     if(i>0){
                         last=cadenaPostFija.charAt(cadenaPostFija.length()-1);
-                        if(isOperator(last)&& last!='M')
+                        if(!isOperator(last)&& last!='M')
                             cadenaPostFija.append("M");
                     }
                     switch(a){
