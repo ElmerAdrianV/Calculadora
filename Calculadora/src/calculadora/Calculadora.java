@@ -235,7 +235,7 @@ public class Calculadora {
     private void convierteAOperaciones(){
         PilaA<Character> aux= new PilaA();
         StringBuilder cadenaPostFija=new StringBuilder();
-        char a;
+        char a,last;
         int n= cadena.length();
         if(verificarCadena()){
             for(int i=0;i<n;i++){
@@ -243,7 +243,8 @@ public class Calculadora {
                 if(!isOperator(a))
                     cadenaPostFija.append(a);
                 else{
-                    if(i>0 && cadenaPostFija.charAt(cadenaPostFija.length()-1)!='M')
+                    last=cadenaPostFija.charAt(cadenaPostFija.length()-1);
+                    if(isOperator(last)&& last!='M')
                         cadenaPostFija.append("M");
                     switch(a){
                         case '(':
