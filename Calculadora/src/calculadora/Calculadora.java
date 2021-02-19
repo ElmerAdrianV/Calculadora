@@ -247,7 +247,7 @@ public class Calculadora {
                         cadenaPostFija.append("M");
                     switch(a){
                         case '(':
-                            if(isNumber(cadena.charAt(i-1)))
+                            if(i>0 && isNumber(cadena.charAt(i-1)))
                                 aux.push('*');
                             aux.push(a);
                             break;
