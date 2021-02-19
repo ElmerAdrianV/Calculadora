@@ -285,51 +285,51 @@ public class Calculadora {
         convierteAOperaciones();
         
         int i=0, j , n=operaciones.length();
-        double x, y;
+        PilaA<Double> numeros=new PilaA<>();
+        double x,y;
         boolean error=false;
         
         if(!this.operaciones.equals("¡Error!")){
-            while(i<n && operaciones.charAt(i)!='M')
-                    i++;
-            
-            x= Double.parseDouble( operaciones.substring(0, i) );
-            i++;//saltarnos la M;
-            
             while(i<n && !error){
-                j=i;
-                while(j<n && operaciones.charAt(j)!='M')
-                    j++;
-                
-                y= Double.parseDouble( operaciones.substring(i, j) );
-                j++;//saltarse la M;
-                
-                while(j<n && isOperator(operaciones.charAt(j)) ){
-                    switch(operaciones.charAt(j)){
-                        case'+':
-                            x=+y;
-                            break;
-                        case'*':
-                            x*=y;
-                            break;
-                        case'/':
-                            if(y==0)
-                                error=true;
-                            else
-                                x/=y;
-                            break;
-                        case'^':
-                            if(y==0 && x==0)
-                                error=true;
-                            else
-                                x=Math.pow(x, y);    
-                            break;
-                    }
-                    j++;
+                if( !isOperator(operaciones.charAt(i)) ){
+                    j=i;
+                    while(i<n && operaciones.charAt(i)!='M')
+                        i++;
+                    numeros.push( Double.parseDouble( operaciones.substring(j,i) ) );
+                    i++;//saltarse la M;	 
                 }
-                i=j;
+                else{
+                    while(i<n && isOperator(operaciones.charAt(i)) ){
+                        x=numeros.pop();
+                        y=numeros.pop();
+                        switch(operaciones.charAt(i)){
+                            case'+':
+                                x=+y;
+                                break;
+                            case'*':
+                                x*=y;
+                                break;
+                            case'/':
+                                if(y==0)
+                                    error=true;
+                                else
+                                    x/=y;
+                                break;
+                            case'^':
+                                if(y==0 && x==0)
+                                    error=true;
+                                else
+                                    x=Math.pow(x, y);
+                                break;
+                        }
+                        numeros.push(x);
+                        i++;
+                    }
+                }
             }
-            if(!error)
-                this.resultado=String.valueOf(x);
+            if(!error){
+                this.resultado=String.valueOf(numeros.pop());
+            }
             else
                 this.resultado="¡Error!";
         }
