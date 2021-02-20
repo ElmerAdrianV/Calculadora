@@ -77,6 +77,7 @@ public class Calculadora {
     */
     public String getResultado() {
         return resultado;
+        
     }
     
     
@@ -297,6 +298,9 @@ public class Calculadora {
             }
             i++;
         }
+        if(!parentesis.isEmpty())
+           resp=false; 
+        
         return resp;
     }
     
