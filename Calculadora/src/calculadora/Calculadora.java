@@ -386,6 +386,9 @@ public class Calculadora {
                                     aux.push('+');
                                     break;
                                 default:
+                                    if(i>0 && isNumber(cadena.charAt(i-1)))
+                                        aux.push('+');
+                                        
                                     cadenaPostFija.append('-');
                                     break;
                             }   
@@ -429,6 +432,7 @@ public class Calculadora {
         PilaA<Double> numeros=new PilaA<>();
         double x=0,y;
         boolean error=false;
+        
         
         if(!operaciones.equals("¡Error!")){
             while(i<n && !error){
