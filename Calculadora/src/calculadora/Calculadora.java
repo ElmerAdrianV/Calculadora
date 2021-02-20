@@ -77,6 +77,7 @@ public class Calculadora {
     */
     public String getResultado() {
         return resultado;
+        
     }
     
     
@@ -207,6 +208,9 @@ public class Calculadora {
                     punto=false;
                     break; 
                 case'+':
+                    if(i+2<n && cadena.charAt(i+1)=='-' && cadena.charAt(i+2)=='('){
+                        resp=false;
+                    }
                     if(i+1<n){
                         a=cadena.charAt(i+1);
                         if( a=='+' || a=='^' || a=='*' || a=='/' || a==')' ){
@@ -219,6 +223,9 @@ public class Calculadora {
                     punto=false;
                     break;
                 case'-':
+                    if(i+2<n && cadena.charAt(i+1)=='-' && cadena.charAt(i+2)=='('){
+                        resp=false;
+                    }
                     if(i+1<n){
                         a=cadena.charAt(i+1);
                         if(a=='+'|| a=='^' || a=='*' || a=='/' || a==')' ){
@@ -244,6 +251,9 @@ public class Calculadora {
                     punto=false;
                     break;
                 case'*':
+                    if(i+2<n && cadena.charAt(i+1)=='-' && cadena.charAt(i+2)=='('){
+                        resp=false;
+                    }
                     if(i+1<n){
                         a=cadena.charAt(i+1);
                         if( a=='+' || a=='^' || a=='*' || a=='/' || a==')'){
@@ -256,6 +266,9 @@ public class Calculadora {
                     punto=false;
                     break;
                 case'/':
+                    if(i+2<n && cadena.charAt(i+1)=='-' && cadena.charAt(i+2)=='('){
+                        resp=false;
+                    }
                     if(i+1<n){
                         a=cadena.charAt(i+1);
                         if( a=='+' || a=='^' || a=='*' || a=='/' || a==')'){
@@ -268,6 +281,9 @@ public class Calculadora {
                     punto=false;
                     break;
                 case'^':
+                    if(i+2<n && cadena.charAt(i+1)=='-' && cadena.charAt(i+2)=='('){
+                        resp=false;
+                    }
                     if(i+1<n){
                         a=cadena.charAt(i+1);
                         if( a=='+' || a=='^' || a=='*' || a=='/' || a==')' ){
@@ -297,6 +313,9 @@ public class Calculadora {
             }
             i++;
         }
+        if(!parentesis.isEmpty())
+           resp=false; 
+        
         return resp;
     }
     
@@ -343,6 +362,8 @@ public class Calculadora {
     * En caso contrario se almacena "¡Error!"
     *
     * Cada elemento númerico se separa con una 'M'
+    * En caso '-', la C indica un cambio de signo del elemento anterior
+    * si no '-' no esta acompañada de la C indica que es parte del elemento
     * Por ejemplo: la expresión "(3+2)" se convierte a la expresión "3M2M+"
     * </pre>
     * @see isNumber
@@ -354,16 +375,16 @@ public class Calculadora {
         StringBuilder cadenaPostFija=new StringBuilder();
         char a,last,next;
         int n= cadena.length();
-        
+        int i=0;
         if(verificarCadena()){
-            for(int i=0;i<n;i++){
+            while(i<n){
                 a=cadena.charAt(i);
                 if(!isOperator(a))
                     cadenaPostFija.append(a);
                 else{
                     if(cadenaPostFija.length()>0){
                         last=cadenaPostFija.charAt(cadenaPostFija.length()-1);
-                        if(!isOperator(last)&& last!='M')
+                        if(!isOperator(last)&& last!='M' && last!='C')
                             cadenaPostFija.append("M");
                     }
                     switch(a){
@@ -376,6 +397,13 @@ public class Calculadora {
                             while(!aux.isEmpty() && !aux.peek().equals('('))
                                 cadenaPostFija.append(aux.pop());
                             aux.pop();
+                            if(aux.peek()=='-'){
+                                cadenaPostFija.append(aux.pop());
+                                cadenaPostFija.append('C');
+                            }
+                            if(i+1<n && cadena.charAt(i+1)=='(')
+                                aux.push('*');
+                            
                             break;
                         case '-':
                             switch( cadena.charAt(i+1) ){
@@ -384,27 +412,33 @@ public class Calculadora {
                                     break;
                                 case '-':
                                     aux.push('+');
+                                    i++;
                                     break;
                                 default:
-                                    if(i>0 && isNumber(cadena.charAt(i-1)))
+                                    if(i>0 && ( isNumber(cadena.charAt(i-1)) || cadena.charAt(i-1)==')' ) )
                                         aux.push('+');
-                                        
                                     cadenaPostFija.append('-');
                                     break;
                             }   
                             break;
                         default:
-                            while(!aux.isEmpty()&& aux.peek()!='('&& jerarquiaOperandos(a,aux.peek()))
-                                cadenaPostFija.append(aux.pop());
+                            while(!aux.isEmpty()&& aux.peek()!='('&& jerarquiaOperandos(a,aux.peek())){
+                                    cadenaPostFija.append(aux.peek());
+                                    
+                                    aux.pop();
+                            }
                             aux.push(a);
-                            if(aux.peek()=='-')
+                            if(aux.peek()=='-'){
                                 cadenaPostFija.append(aux.pop());
+                                cadenaPostFija.append('C');
+                            }
                             break;
                     }
                 }
+                i++;
             }
             last=cadenaPostFija.charAt(cadenaPostFija.length()-1);
-            if(!isOperator(last)&& last!='M')
+            if(!isOperator(last)&& last!='M' && last!='C')
                 cadenaPostFija.append("M");
 
             while(!aux.isEmpty())
@@ -436,7 +470,9 @@ public class Calculadora {
         
         if(!operaciones.equals("¡Error!")){
             while(i<n && !error){
-                if( !isOperator(operaciones.charAt(i)) || operaciones.charAt(i)=='-' ){
+                if(operaciones.charAt(i)=='C')
+                    i++;
+                if(!isOperator(operaciones.charAt(i)) || operaciones.charAt(i)=='-' && i+1<n && operaciones.charAt(i+1)!='C'){
                     j=i;
                     while(i<n && operaciones.charAt(i)!='M')
                         i++;
@@ -444,6 +480,7 @@ public class Calculadora {
                     i++;//saltarse la M;	 
                 }
                 else{
+                    //if(operaciones.charAt(i)=='-' && i+1<n &&)
                     while(i<n && isOperator(operaciones.charAt(i)) ){
                         switch(operaciones.charAt(i)){
                             case'-':
@@ -454,6 +491,7 @@ public class Calculadora {
                                     y=numeros.pop();
                                     x=y-x;
                                 }
+                                
                                 break;
                             case'+':
                                 y=numeros.pop();
