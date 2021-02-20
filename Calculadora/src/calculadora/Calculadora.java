@@ -8,46 +8,91 @@ package calculadora;
 import pila.PilaA; ;
 
 /**
- *
+ * <pre>
+ * Clase Calculadora
+ * 
+ * Contiene los métodos de una calculadora que
+ * puede realizar operaciones aritméticas sobre 
+ * números reales, tanto negativos como positivos
+ * empleando la estructura de pilas
+ * </pre>
+ * 
  * @author ElmerAdrianV
- * @author bobadilla E
+ * @author BobadillaE
+ * @author PabloVitela
+ * @author DiegoMason
+ * @author Carolina
  */
+    
 public class Calculadora {
 
     private String cadena; //inFija
     private String operaciones; //postFija;
     private String resultado;
+    
+    /**
+    *Constructor vacío de Calculadora
+    */
 
     public Calculadora(){
     }    
     
+    /**
+     * Constructor de Calculadora 
+     * @param cadena es una cadena de operaciones expresada en notación infija
+     */
+
     public Calculadora(String cadena){
         this.cadena=cadena;
-        verificarCadena();
     }
     
+    /**
+    *Getter de cadena
+    *@return <pre>regresa la cadena en notación infija
+    * guardada como atributo
+    * </pre>
+    */
+
     public String getCadena() {
         return cadena;
     }
+    /**
+    * Setter que modifica la cadena
+    * @param cadena la cadena que modifica al atributo
+    */
 
     public void setCadena(String cadena) {    
         this.cadena = cadena;
     }
     
-    /**
-     *@return <pre>regresa el resultado de las operaciones 
-     * guardadas como atributo actualmente
-     * </pre>
-     */
+   /**
+    *Getter del resultado
+    *@return <pre>regresa el resultado de las operaciones 
+    * guardadas como atributo actualmente
+    * </pre>
+    */
     public String getResultado() {
         return resultado;
     }
-
+    
+    
+    /**
+    *@return una cadena con la información de la clase Calculadora con todos sus atributos
+    */
     @Override
     public String toString() {
         return "Calculadora: \n" +"cadena="+cadena+  "operaciones=" + operaciones + ", resultado=" + resultado + '\n';
     }
     
+    /**
+    * Identifica si un caracter ingresado es un número real
+    * @param a es el elemento a verificar
+    * @return <ul>
+    * <li>true: el caracter es un número real</li>
+    * <li>false: el caracter no es un número real</li>
+    * </ul>
+    */
+
     private boolean isNumber(char a){
         boolean resp= true;
         switch(a){
@@ -69,6 +114,14 @@ public class Calculadora {
         return resp;
     }
     
+    /**
+    * Identifica si un caracter ingresado es un operador
+    * @param a es el elemento a verificar
+    * @return <ul>
+    * <li>true: el caracter es un operador</li>
+    * <li>false: el caracter no es operador</li>
+    * </ul>
+    */
     private boolean isOperator(char a){
         boolean resp= true;
         switch(a){
@@ -87,6 +140,18 @@ public class Calculadora {
         return resp;
     }
     
+    /**
+    * <pre>Revisa una expresión en notación infija 
+    * y se asegura de que no exista algún error sintáctico
+    * Por ejemplo: la expresión "3-2(/4)" sería falso, 
+    * pues es incorrecto tener dos operandos consecutivos
+    * </pre>
+    * @see isNumber
+    * @return <ul>
+    * <li>true: la cadena pasó la verificación </li>
+    * <li>false: la cadena no pasó la verificación</li>
+    * </ul>
+    */
     public boolean verificarCadena(){
         boolean resp;
         PilaA<Character> parentesis = new PilaA<>();
@@ -227,7 +292,17 @@ public class Calculadora {
         return resp;
     }
     
-    
+   
+    /**
+    * Verifica la jerarquía de operaciones de dos operandos
+    * @param operando: solo admite los valores de char '+', '/','*', '^'
+    * @param topes: solo admite los valores de char '+', '/','*', '^'
+    * @return <ul>
+    * <li>true: si operando es mayor en jerarquía que tope;</li>
+    * <li>false: si operando es menor o igualen jerarquía que tope;</li>
+    * </ul>       
+    */
+
     private boolean jerarquiaOperandos(char operando, char tope){
        boolean resp=true;
         switch(operando){
@@ -251,7 +326,18 @@ public class Calculadora {
         return resp;
     }
     
-    
+    /**
+    * <pre>Convierte una expresión válida de notación infija a su equivalente en notación postfija 
+    * y la almacena en el atributo "operaciones" si es válida.
+    * En caso contrario se almacena "¡Error!"
+    *
+    * Cada elemento númerico se separa con una 'M'
+    * Por ejemplo: la expresión "(3+2)" se convierte a la expresión "3M2M+"
+    * </pre>
+    * @see isNumber
+    * @see isOperator
+    */
+
     private void convierteAOperaciones(){
         PilaA<Character> aux= new PilaA();
         StringBuilder cadenaPostFija=new StringBuilder();
@@ -315,7 +401,15 @@ public class Calculadora {
         else
             operaciones="¡Error!";   
     }
-    
+    /**
+    * <pre>Evalúa la expresión en notación postfija para conocer su resultado global
+    * Por ejemplo: la expresión expresión "3M2M+" sería equivalente a "5"
+    * </pre>
+    * @param cadena es la cadena previamente verificada y transformada a notación postfija
+    * @see isOperator
+    * @return resultado con el nuevo valor obtenido
+    */
+
     public String evaluarOperaciones(String cadena){
         this.cadena=cadena;
         convierteAOperaciones();
