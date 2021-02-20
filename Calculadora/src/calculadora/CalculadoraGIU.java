@@ -5,12 +5,14 @@
  */
 package calculadora;
 
+import static java.lang.Double.parseDouble;
+
 /**
  *
  * @author elmer
  */
 public class CalculadoraGIU extends javax.swing.JFrame {
-
+private Calculadora miCalculadora;
     /**
      * Creates new form CalculadoraGIU
      */
@@ -181,6 +183,11 @@ public class CalculadoraGIU extends javax.swing.JFrame {
         });
 
         btIgual.setText("=");
+        btIgual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btIgualActionPerformed(evt);
+            }
+        });
 
         btBORRAR.setText("Borrar");
         btBORRAR.addActionListener(new java.awt.event.ActionListener() {
@@ -419,6 +426,17 @@ public class CalculadoraGIU extends javax.swing.JFrame {
         // TODO add your handling code here:
         info.setText(" ");
     }//GEN-LAST:event_btBORRARActionPerformed
+
+    private void btIgualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btIgualActionPerformed
+        // TODO add your handling code here:
+        String cadena;
+        String res;
+        
+        cadena= info.getText();
+        res=miCalculadora.evaluarOperaciones(cadena);
+        info.setText(res);
+        
+    }//GEN-LAST:event_btIgualActionPerformed
 
     /**
      * @param args the command line arguments
