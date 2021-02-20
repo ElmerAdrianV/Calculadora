@@ -430,6 +430,7 @@ public class Calculadora {
         double x=0,y;
         boolean error=false;
         
+        
         if(!operaciones.equals("¡Error!")){
             while(i<n && !error){
                 if( !isOperator(operaciones.charAt(i)) || operaciones.charAt(i)=='-' ){
