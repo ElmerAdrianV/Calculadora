@@ -219,14 +219,14 @@ public class Calculadora {
                     punto=false;
                     break;
                 case'-':
-                    if(i>0 && i+1<n){
+                    if(i+1<n){
                         a=cadena.charAt(i+1);
                         if(a=='+'|| a=='^' || a=='*' || a=='/' || a==')' ){
                             resp=false;
                         }
                         else{
                             if(!isNumber(a) && a!='('){
-                                if(a=='-'  && i+2<n){
+                                if(i>0 && a=='-'  && i+2<n){
                                     a=cadena.charAt(i+2);
                                     if(!isNumber(a) && a!='.')
                                         resp=false;
@@ -234,7 +234,7 @@ public class Calculadora {
                                 }
                                 else
                                     if(a!='.')
-                                        resp=false;
+                                    resp=false;
                             }
                         }
                     }
@@ -361,21 +361,6 @@ public class Calculadora {
                 if(!isOperator(a))
                     cadenaPostFija.append(a);
                 else{
-                    if(a=='-'){
-                        if(cadenaPostFija.length()>0){
-                            last=cadenaPostFija.charAt(cadenaPostFija.length()-1);
-                            if(isNumber(last)&& last!='M')
-                                cadenaPostFija.append("M");
-                        }
-                        if(i!=0 && !isOperator(cadena.charAt(i-1)) ){
-                            if(cadena.charAt(i+1)=='-')
-                               i++;
-                            else
-                                cadenaPostFija.append(a);
-                            
-                            a='+'; 
-                            }
-                    } 
                     if(cadenaPostFija.length()>0){
                         last=cadenaPostFija.charAt(cadenaPostFija.length()-1);
                         if(!isOperator(last)&& last!='M')
@@ -392,13 +377,25 @@ public class Calculadora {
                                 cadenaPostFija.append(aux.pop());
                             aux.pop();
                             break;
+                        case '-':
+                            switch( cadena.charAt(i+1) ){
+                                case '(':
+                                    aux.push(a);
+                                    break;
+                                case '-':
+                                    aux.push('+');
+                                    break;
+                                default:
+                                    cadenaPostFija.append('-');
+                                    break;
+                            }   
+                            break;
                         default:
                             while(!aux.isEmpty()&& aux.peek()!='('&& jerarquiaOperandos(a,aux.peek()))
                                 cadenaPostFija.append(aux.pop());
-                            if(a!='-')
-                                aux.push(a);
-                            else
-                                cadenaPostFija.append(a);
+                            aux.push(a);
+                            if(aux.peek()=='-')
+                                cadenaPostFija.append(aux.pop());
                             break;
                     }
                 }
@@ -430,7 +427,7 @@ public class Calculadora {
         
         int i=0, j , n=operaciones.length();
         PilaA<Double> numeros=new PilaA<>();
-        double x,y;
+        double x=0,y;
         boolean error=false;
         
         if(!operaciones.equals("¡Error!")){
@@ -444,26 +441,41 @@ public class Calculadora {
                 }
                 else{
                     while(i<n && isOperator(operaciones.charAt(i)) ){
-                        x=numeros.pop();
-                        y=numeros.pop();
                         switch(operaciones.charAt(i)){
+                            case'-':
+                                x=numeros.pop();
+                                if(numeros.isEmpty())
+                                    x=0-x;
+                                else{
+                                    y=numeros.pop();
+                                    x=y-x;
+                                }
+                                break;
                             case'+':
+                                y=numeros.pop();
+                                x=numeros.pop();
                                 x=x+y;
                                 break;
                             case'*':
+                                y=numeros.pop();
+                                x=numeros.pop();
                                 x=x*y;
                                 break;
                             case'/':
-                                if(x==0)
+                                y=numeros.pop();
+                                x=numeros.pop();
+                                if(y==0)
                                     error=true;
                                 else
-                                    x=y/x;
+                                    x=x/y;
                                 break;
                             case'^':
+                                y=numeros.pop();
+                                x=numeros.pop();
                                 if(y==0 && x==0)
                                     error=true;
                                 else
-                                    x=Math.pow(y, x);
+                                    x=Math.pow(x, y);
                                 break;
                         }
                         numeros.push(x);
