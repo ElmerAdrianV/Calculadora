@@ -231,7 +231,7 @@ public class Calculadora {
                                 }
                                 else
                                     resp=false;
-                                }
+                            }
                         }
                     }
                     else
@@ -324,7 +324,10 @@ public class Calculadora {
                 break;
             case '^':
                     resp=false;
-                break;    
+                break;  
+            default:
+                    resp=false;
+                break;
         }
         
         return resp;
@@ -357,16 +360,17 @@ public class Calculadora {
                     if(a=='-'){
                         if(i>0){
                             last=cadenaPostFija.charAt(cadenaPostFija.length()-1);
-                            if(!isOperator(last)&& last!='M')
+                            if(isNumber(last)&& last!='M')
                                 cadenaPostFija.append("M");
                         }
-                        if(cadena.charAt(i+1)=='-'){
-                           i++;
-                        }
-                        else{
-                            cadenaPostFija.append(a);
-                        }
-                        a='+'; 
+                        if(i!=0 && !isOperator(cadena.charAt(i-1)) ){
+                            if(cadena.charAt(i+1)=='-')
+                               i++;
+                            else
+                                cadenaPostFija.append(a);
+                            
+                            a='+'; 
+                            }
                     } 
                     if(i>0){
                         last=cadenaPostFija.charAt(cadenaPostFija.length()-1);
@@ -387,8 +391,10 @@ public class Calculadora {
                         default:
                             while(!aux.isEmpty()&& aux.peek()!='('&& jerarquiaOperandos(a,aux.peek()))
                                 cadenaPostFija.append(aux.pop());
-                            
-                            aux.push(a);
+                            if(a!='-')
+                                aux.push(a);
+                            else
+                                cadenaPostFija.append(a);
                             break;
                     }
                 }
@@ -444,7 +450,7 @@ public class Calculadora {
                                 x=x*y;
                                 break;
                             case'/':
-                                if(y==0)
+                                if(x==0)
                                     error=true;
                                 else
                                     x=y/x;
