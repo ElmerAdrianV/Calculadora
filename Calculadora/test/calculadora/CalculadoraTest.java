@@ -105,5 +105,78 @@ public class CalculadoraTest {
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");
     }
+
+    /**
+     * Test of evaluarOperaciones method, of class Calculadora.
+     */
+    @Test
+    public void testEvaluarOperaciones() {
+        System.out.println("evaluarOperaciones");
+        String cadena = "12+4";
+        Calculadora instance = new Calculadora();
+        String expResult = "16.0";
+        String result = instance.evaluarOperaciones(cadena);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of isNumber method, of class Calculadora.
+     */
+    @Test
+    public void testIsNumber() {
+        System.out.println("isNumber");
+        char a = ' ';
+        Calculadora instance = new Calculadora();
+        boolean expResult = false;
+        boolean result = instance.isNumber(a);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of isOperator method, of class Calculadora.
+     */
+    @Test
+    public void testIsOperator() {
+        System.out.println("isOperator");
+        char a = ' ';
+        Calculadora instance = new Calculadora();
+        boolean expResult = false;
+        boolean result = instance.isOperator(a);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of jerarquiaOperandos method, of class Calculadora.
+     */
+    @Test
+    public void testJerarquiaOperandos() {
+        System.out.println("jerarquiaOperandos");
+        char operando = ' ';
+        char tope = ' ';
+        Calculadora instance = new Calculadora();
+        boolean expResult = false;
+        boolean result = instance.jerarquiaOperandos(operando, tope);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of convierteAOperaciones method, of class Calculadora.
+     */
+    @Test
+    public void testConvierteAOperaciones() {
+        System.out.println("convierteAOperaciones");
+        Calculadora instance = new Calculadora();
+        instance.convierteAOperaciones();
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
     
 }
