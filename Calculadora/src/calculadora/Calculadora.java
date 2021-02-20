@@ -88,11 +88,20 @@ public class Calculadora {
     }
     
     public boolean verificarCadena(){
-        boolean resp=true;
+        boolean resp;
         PilaA<Character> parentesis = new PilaA<>();
         boolean punto=false;
-        int i=0, n=cadena.length();
+        int i=0, n;
         char a;
+        
+        if(cadena==null || cadena.length()==0){
+            resp=false;
+        }
+        else{
+            resp=true;
+            n=cadena.length();
+        }
+            
 
         while(i<n && resp){
             switch(cadena.charAt(i)){
@@ -304,8 +313,7 @@ public class Calculadora {
             operaciones= cadenaPostFija.toString();
         }
         else
-            operaciones="¡Error!";
-        
+            operaciones="¡Error!";   
     }
     
     public String evaluarOperaciones(String cadena){
