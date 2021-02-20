@@ -386,6 +386,9 @@ public class Calculadora {
                                     aux.push('+');
                                     break;
                                 default:
+                                    if(i>0 && isNumber(cadena.charAt(i-1)))
+                                        aux.push('+');
+                                        
                                     cadenaPostFija.append('-');
                                     break;
                             }   
