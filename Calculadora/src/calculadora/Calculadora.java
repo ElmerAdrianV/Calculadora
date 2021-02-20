@@ -64,6 +64,10 @@ public class Calculadora {
     public void setCadena(String cadena) {    
         this.cadena = cadena;
     }
+
+    public String getOperaciones() {
+        return operaciones;
+    }
     
    /**
     *Getter del resultado
@@ -157,7 +161,7 @@ public class Calculadora {
         PilaA<Character> parentesis = new PilaA<>();
         boolean punto=false;
         int i=0, n=0;
-        char a;
+        char a, m;
         
         if(cadena==null || cadena.length()==0){
             resp=false;
@@ -169,7 +173,10 @@ public class Calculadora {
             
 
         while(i<n && resp){
-            switch(cadena.charAt(i)){
+            m=cadena.charAt(i);
+            if(i==0 && isOperator(m) && m!='(' && m!='-')
+                        resp=false;
+            switch(m){
                 case '(':
                     if(i+1<n){
                         a=cadena.charAt(i+1);
@@ -212,22 +219,23 @@ public class Calculadora {
                     punto=false;
                     break;
                 case'-':
-                    if(i+1<n){
+                    if(i>0 && i+1<n){
                         a=cadena.charAt(i+1);
                         if(a=='+'|| a=='^' || a=='*' || a=='/' || a==')' ){
                             resp=false;
                         }
                         else{
-                            if(!isNumber(a)){
-                                if(a=='-' && i+2<n){
+                            if(!isNumber(a) && a!='('){
+                                if(a=='-'  && i+2<n){
                                     a=cadena.charAt(i+2);
                                     if(!isNumber(a) && a!='.')
                                         resp=false;
                                     i++;
                                 }
                                 else
-                                    resp=false;
-                                }
+                                    if(a!='.')
+                                        resp=false;
+                            }
                         }
                     }
                     else
@@ -292,7 +300,7 @@ public class Calculadora {
         return resp;
     }
     
-   
+  
     /**
     * Verifica la jerarquía de operaciones de dos operandos
     * @param operando solo admite los valores de char '+', '/','*', '^'
@@ -320,7 +328,10 @@ public class Calculadora {
                 break;
             case '^':
                     resp=false;
-                break;    
+                break;  
+            default:
+                    resp=false;
+                break;
         }
         
         return resp;
@@ -343,7 +354,7 @@ public class Calculadora {
         StringBuilder cadenaPostFija=new StringBuilder();
         char a,last,next;
         int n= cadena.length();
-        String operaciones;
+        
         if(verificarCadena()){
             for(int i=0;i<n;i++){
                 a=cadena.charAt(i);
@@ -351,20 +362,21 @@ public class Calculadora {
                     cadenaPostFija.append(a);
                 else{
                     if(a=='-'){
-                        if(i>0){
+                        if(cadenaPostFija.length()>0){
                             last=cadenaPostFija.charAt(cadenaPostFija.length()-1);
-                            if(!isOperator(last)&& last!='M')
+                            if(isNumber(last)&& last!='M')
                                 cadenaPostFija.append("M");
                         }
-                        if(cadena.charAt(i+1)=='-'){
-                           i++;
-                        }
-                        else{
-                            cadenaPostFija.append(a);
-                        }
-                        a='+'; 
+                        if(i!=0 && !isOperator(cadena.charAt(i-1)) ){
+                            if(cadena.charAt(i+1)=='-')
+                               i++;
+                            else
+                                cadenaPostFija.append(a);
+                            
+                            a='+'; 
+                            }
                     } 
-                    if(i>0){
+                    if(cadenaPostFija.length()>0){
                         last=cadenaPostFija.charAt(cadenaPostFija.length()-1);
                         if(!isOperator(last)&& last!='M')
                             cadenaPostFija.append("M");
@@ -383,8 +395,10 @@ public class Calculadora {
                         default:
                             while(!aux.isEmpty()&& aux.peek()!='('&& jerarquiaOperandos(a,aux.peek()))
                                 cadenaPostFija.append(aux.pop());
-                            
-                            aux.push(a);
+                            if(a!='-')
+                                aux.push(a);
+                            else
+                                cadenaPostFija.append(a);
                             break;
                     }
                 }
@@ -396,10 +410,10 @@ public class Calculadora {
             while(!aux.isEmpty())
                 cadenaPostFija.append(aux.pop());
          
-            operaciones= cadenaPostFija.toString();
+            this.operaciones= cadenaPostFija.toString();
         }
         else
-            operaciones="¡Error!";   
+            this.operaciones="¡Error!";   
     }
     /**
     * <pre>Evalúa la expresión en notación postfija para conocer su resultado global
@@ -440,7 +454,7 @@ public class Calculadora {
                                 x=x*y;
                                 break;
                             case'/':
-                                if(y==0)
+                                if(x==0)
                                     error=true;
                                 else
                                     x=y/x;
