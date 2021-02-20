@@ -346,6 +346,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="C"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btCActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="info">
         </Component>
@@ -353,6 +356,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Ans"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btAnsActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

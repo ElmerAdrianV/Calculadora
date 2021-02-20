@@ -6,6 +6,8 @@
 package calculadora;
 
 import static java.lang.Double.parseDouble;
+import pila.Pila;
+import pila.PilaA;
 
 /**
  *
@@ -17,6 +19,7 @@ private Calculadora miCalculadora;
      * Creates new form CalculadoraGIU
      */
     public CalculadoraGIU() {
+        miCalculadora= new Calculadora();
         initComponents();
     }
 
@@ -197,8 +200,18 @@ private Calculadora miCalculadora;
         });
 
         btC.setText("C");
+        btC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCActionPerformed(evt);
+            }
+        });
 
         btAns.setText("Ans");
+        btAns.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAnsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -256,7 +269,6 @@ private Calculadora miCalculadora;
                                             .addComponent(btSuma, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
                                             .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
                                             .addComponent(btC, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
-                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btPunto, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btMenos, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -423,8 +435,21 @@ private Calculadora miCalculadora;
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btBORRARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBORRARActionPerformed
-        // TODO add your handling code here:
-        info.setText(" ");
+        String cadena;
+        cadena= info.getText();
+        if(cadena.contains("¡Error!") && cadena.contains("No prevs Ans"))
+            cadena= "";
+        else
+            if(cadena.length()!=0){
+                cadena= cadena.substring(0,cadena.length()-1);
+                info.setText(cadena);
+            }
+        
+        
+        
+        
+        
+        
     }//GEN-LAST:event_btBORRARActionPerformed
 
     private void btIgualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btIgualActionPerformed
@@ -433,10 +458,27 @@ private Calculadora miCalculadora;
         String res;
         
         cadena= info.getText();
-        res=miCalculadora.evaluarOperaciones(cadena);
-        info.setText(res);
+        if(cadena != ""){
+            res=miCalculadora.evaluarOperaciones(cadena);
+            info.setText(res);}
+        else 
+            info.setText("");
+        
         
     }//GEN-LAST:event_btIgualActionPerformed
+
+    private void btCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCActionPerformed
+        // TODO add your handling code here:
+        info.setText(" ");
+    }//GEN-LAST:event_btCActionPerformed
+
+    private void btAnsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAnsActionPerformed
+        // TODO add your handling code here:
+        if(miCalculadora.getResultado()!= null)
+                info.setText(miCalculadora.getResultado());
+        else
+            info.setText("No prevs Ans");
+    }//GEN-LAST:event_btAnsActionPerformed
 
     /**
      * @param args the command line arguments
