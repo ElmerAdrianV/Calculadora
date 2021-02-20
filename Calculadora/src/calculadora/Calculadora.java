@@ -91,7 +91,7 @@ public class Calculadora {
         boolean resp;
         PilaA<Character> parentesis = new PilaA<>();
         boolean punto=false;
-        int i=0, n;
+        int i=0, n=0;
         char a;
         
         if(cadena==null || cadena.length()==0){
