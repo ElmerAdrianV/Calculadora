@@ -161,7 +161,7 @@ public class Calculadora {
         PilaA<Character> parentesis = new PilaA<>();
         boolean punto=false;
         int i=0, n=0;
-        char a;
+        char a, m;
         
         if(cadena==null || cadena.length()==0){
             resp=false;
@@ -173,7 +173,10 @@ public class Calculadora {
             
 
         while(i<n && resp){
-            switch(cadena.charAt(i)){
+            m=cadena.charAt(i);
+            if(i==0 && isOperator(m) && m!='(' && m!='-')
+                        resp=false;
+            switch(m){
                 case '(':
                     if(i+1<n){
                         a=cadena.charAt(i+1);
@@ -216,21 +219,22 @@ public class Calculadora {
                     punto=false;
                     break;
                 case'-':
-                    if(i+1<n){
+                    if(i>0 && i+1<n){
                         a=cadena.charAt(i+1);
                         if(a=='+'|| a=='^' || a=='*' || a=='/' || a==')' ){
                             resp=false;
                         }
                         else{
-                            if(!isNumber(a)){
-                                if(a=='-' && i+2<n){
+                            if(!isNumber(a) && a!='('){
+                                if(a=='-'  && i+2<n){
                                     a=cadena.charAt(i+2);
                                     if(!isNumber(a) && a!='.')
                                         resp=false;
                                     i++;
                                 }
                                 else
-                                    resp=false;
+                                    if(a!='.')
+                                        resp=false;
                             }
                         }
                     }
@@ -358,7 +362,7 @@ public class Calculadora {
                     cadenaPostFija.append(a);
                 else{
                     if(a=='-'){
-                        if(i>0){
+                        if(cadenaPostFija.length()>0){
                             last=cadenaPostFija.charAt(cadenaPostFija.length()-1);
                             if(isNumber(last)&& last!='M')
                                 cadenaPostFija.append("M");
@@ -372,7 +376,7 @@ public class Calculadora {
                             a='+'; 
                             }
                     } 
-                    if(i>0){
+                    if(cadenaPostFija.length()>0){
                         last=cadenaPostFija.charAt(cadenaPostFija.length()-1);
                         if(!isOperator(last)&& last!='M')
                             cadenaPostFija.append("M");
