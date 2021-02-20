@@ -100,7 +100,7 @@ public class Calculadora {
                     if(i+1<n){
                         a=cadena.charAt(i+1);
                         
-                        if( a==')' || a=='*' || a=='/' || a=='^')
+                        if( a==')'|| a=='+'|| a=='*' || a=='/' || a=='^')
                             resp=false;
                         
                         else
@@ -140,8 +140,20 @@ public class Calculadora {
                 case'-':
                     if(i+1<n){
                         a=cadena.charAt(i+1);
-                        if( a=='+'|| a=='^' || a=='*' || a=='/' || a==')' ){
+                        if(a=='+'|| a=='^' || a=='*' || a=='/' || a==')' ){
                             resp=false;
+                        }
+                        else{
+                            if(!isNumber(a)){
+                                if(a=='-' && i+2<n){
+                                    a=cadena.charAt(i+2);
+                                    if(!isNumber(a) && a!='.')
+                                        resp=false;
+                                    i++;
+                                }
+                                else
+                                    resp=false;
+                                }
                         }
                     }
                     else
@@ -176,7 +188,7 @@ public class Calculadora {
                 case'^':
                     if(i+1<n){
                         a=cadena.charAt(i+1);
-                        if( a=='+' || a=='-' || a=='^' || a=='*' || a=='/' || a==')' ){
+                        if( a=='+' || a=='^' || a=='*' || a=='/' || a==')' ){
                             resp=false;
                         }
                     }
@@ -208,26 +220,25 @@ public class Calculadora {
     
     
     private boolean jerarquiaOperandos(char operando, char tope){
-        boolean resp=true;
+       boolean resp=true;
         switch(operando){
             case '+':
                 if(tope=='+')
                     resp=false;
                 break;
             case '*':
-                if(tope=='/'||tope=='*')
+                if(tope!='^')
                     resp=false;
                 break;
             case '/':
-                if(tope=='/'||tope=='*')
+                if(tope!='^')
                     resp=false;
                 break;
             case '^':
-                if(tope=='^')
                     resp=false;
                 break;    
         }
-           
+        
         return resp;
     }
     
@@ -235,14 +246,29 @@ public class Calculadora {
     private void convierteAOperaciones(){
         PilaA<Character> aux= new PilaA();
         StringBuilder cadenaPostFija=new StringBuilder();
-        char a,last;
+        char a,last,next;
         int n= cadena.length();
+        String operaciones;
         if(verificarCadena()){
             for(int i=0;i<n;i++){
                 a=cadena.charAt(i);
                 if(!isOperator(a))
                     cadenaPostFija.append(a);
                 else{
+                    if(a=='-'){
+                        if(i>0){
+                            last=cadenaPostFija.charAt(cadenaPostFija.length()-1);
+                            if(!isOperator(last)&& last!='M')
+                                cadenaPostFija.append("M");
+                        }
+                        if(cadena.charAt(i+1)=='-'){
+                           i++;
+                        }
+                        else{
+                            cadenaPostFija.append(a);
+                        }
+                        a='+'; 
+                    } 
                     if(i>0){
                         last=cadenaPostFija.charAt(cadenaPostFija.length()-1);
                         if(!isOperator(last)&& last!='M')
@@ -255,17 +281,12 @@ public class Calculadora {
                             aux.push(a);
                             break;
                         case ')':
-                            while(!aux.isEmpty()&& !aux.peek().equals('('))
+                            while(!aux.isEmpty() && !aux.peek().equals('('))
                                 cadenaPostFija.append(aux.pop());
-                            
                             aux.pop();
                             break;
                         default:
-                            if(a=='-'){
-                                cadenaPostFija.append(a);
-                                a='+';   
-                            } 
-                            while(!aux.isEmpty() && aux.peek()!='(' && jerarquiaOperandos(a,aux.peek()))
+                            while(!aux.isEmpty()&& aux.peek()!='('&& jerarquiaOperandos(a,aux.peek()))
                                 cadenaPostFija.append(aux.pop());
                             
                             aux.push(a);
@@ -273,9 +294,13 @@ public class Calculadora {
                     }
                 }
             }
+            last=cadenaPostFija.charAt(cadenaPostFija.length()-1);
+            if(!isOperator(last)&& last!='M')
+                cadenaPostFija.append("M");
+
             while(!aux.isEmpty())
                 cadenaPostFija.append(aux.pop());
-            
+         
             operaciones= cadenaPostFija.toString();
         }
         else
@@ -292,9 +317,9 @@ public class Calculadora {
         double x,y;
         boolean error=false;
         
-        if(!this.operaciones.equals("¡Error!")){
+        if(!operaciones.equals("¡Error!")){
             while(i<n && !error){
-                if( !isOperator(operaciones.charAt(i)) ){
+                if( !isOperator(operaciones.charAt(i)) || operaciones.charAt(i)=='-' ){
                     j=i;
                     while(i<n && operaciones.charAt(i)!='M')
                         i++;
@@ -316,13 +341,13 @@ public class Calculadora {
                                 if(y==0)
                                     error=true;
                                 else
-                                    x=x/y;
+                                    x=y/x;
                                 break;
                             case'^':
                                 if(y==0 && x==0)
                                     error=true;
                                 else
-                                    x=Math.pow(x, y);
+                                    x=Math.pow(y, x);
                                 break;
                         }
                         numeros.push(x);
@@ -331,13 +356,13 @@ public class Calculadora {
                 }
             }
             if(!error){
-                this.resultado=String.valueOf(numeros.pop());
+                resultado=String.valueOf(numeros.pop());
             }
             else
-                this.resultado="¡Error!";
+                resultado="¡Error!";
         }
         else
-          this.resultado="¡Error!";
+          resultado="¡Error!";
       
         return resultado;
     }
