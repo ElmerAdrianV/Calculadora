@@ -93,7 +93,7 @@ public class Calculadora {
     * </ul>
     */
 
-    private boolean isNumber(char a){
+    public boolean isNumber(char a){
         boolean resp= true;
         switch(a){
             case '0':
@@ -122,7 +122,7 @@ public class Calculadora {
     * <li>false: el caracter no es operador</li>
     * </ul>
     */
-    private boolean isOperator(char a){
+    public boolean isOperator(char a){
         boolean resp= true;
         switch(a){
             case '+':
@@ -295,15 +295,15 @@ public class Calculadora {
    
     /**
     * Verifica la jerarquía de operaciones de dos operandos
-    * @param operando: solo admite los valores de char '+', '/','*', '^'
-    * @param topes: solo admite los valores de char '+', '/','*', '^'
+    * @param operando solo admite los valores de char '+', '/','*', '^'
+    * @param tope solo admite los valores de char '+', '/','*', '^'
     * @return <ul>
     * <li>true: si operando es mayor en jerarquía que tope;</li>
     * <li>false: si operando es menor o igualen jerarquía que tope;</li>
     * </ul>       
     */
 
-    private boolean jerarquiaOperandos(char operando, char tope){
+    public boolean jerarquiaOperandos(char operando, char tope){
        boolean resp=true;
         switch(operando){
             case '+':
@@ -338,7 +338,7 @@ public class Calculadora {
     * @see isOperator
     */
 
-    private void convierteAOperaciones(){
+    public void convierteAOperaciones(){
         PilaA<Character> aux= new PilaA();
         StringBuilder cadenaPostFija=new StringBuilder();
         char a,last,next;
