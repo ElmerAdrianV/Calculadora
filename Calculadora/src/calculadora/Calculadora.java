@@ -64,6 +64,10 @@ public class Calculadora {
     public void setCadena(String cadena) {    
         this.cadena = cadena;
     }
+
+    public String getOperaciones() {
+        return operaciones;
+    }
     
    /**
     *Getter del resultado
@@ -292,7 +296,7 @@ public class Calculadora {
         return resp;
     }
     
-   
+  
     /**
     * Verifica la jerarquía de operaciones de dos operandos
     * @param operando solo admite los valores de char '+', '/','*', '^'
@@ -343,7 +347,7 @@ public class Calculadora {
         StringBuilder cadenaPostFija=new StringBuilder();
         char a,last,next;
         int n= cadena.length();
-        String operaciones;
+        
         if(verificarCadena()){
             for(int i=0;i<n;i++){
                 a=cadena.charAt(i);
@@ -396,10 +400,10 @@ public class Calculadora {
             while(!aux.isEmpty())
                 cadenaPostFija.append(aux.pop());
          
-            operaciones= cadenaPostFija.toString();
+            this.operaciones= cadenaPostFija.toString();
         }
         else
-            operaciones="¡Error!";   
+            this.operaciones="¡Error!";   
     }
     /**
     * <pre>Evalúa la expresión en notación postfija para conocer su resultado global
