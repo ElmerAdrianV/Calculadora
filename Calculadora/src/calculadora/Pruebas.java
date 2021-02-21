@@ -10,14 +10,12 @@ package calculadora;
  * @author elmer
  */
 public class Pruebas {
+   
     public static void main (String args[]){
         Calculadora miCalculadora= new Calculadora();
-        //"-3+2"
-        //
-        //-(-n)
-        String cadena="-2+3";
+        String cadena="-(10*-5)-2";
         String operaciones;
-        String resultado;
+        String resultado="";
         System.out.println("cadena: "+cadena);
         miCalculadora.setCadena(cadena);
         miCalculadora.convierteAOperaciones();
@@ -27,6 +25,6 @@ public class Pruebas {
         resultado=miCalculadora.evaluarOperaciones(cadena);
         System.out.println("resultado: "+resultado);
         
-        //
+       
     }
 }
