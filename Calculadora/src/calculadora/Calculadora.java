@@ -346,7 +346,7 @@ public class Calculadora {
                     resp=false;
                 break;
             case '^':
-                    resp=false;
+                    resp=true;
                 break;  
             default:
                     resp=false;
