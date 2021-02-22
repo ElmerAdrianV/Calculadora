@@ -4,9 +4,6 @@
  * and open the template in the editor.
  */
 package calculadora;
-
-import pila.PilaA; ;
-
 /**
  * <pre>
  * Clase Calculadora
